@@ -67,6 +67,7 @@ Technical & Design Details:
 Tech Stack: The frontend is primarily structured using HTML, stylized with vanilla CSS, and made interactive via JavaScript.
 Design Language: You've implemented a highly modern "glassmorphism" aesthetic. The design relies on curated color palettes (Blues and Emeralds), subtle micro-animations, blur effects over background "blobs," and high-quality typography using the 'Outfit' font family.
 Data Handling / Logic: From recent updates, the app utilizes localStorage for immediate, persistent frontend state management (like tracking logged-in user names). However, there's also an infrastructure setup moving toward a backend integration (MongoDB/Node.js based authentication and a Supabase client connection).
+
                 ┌────────────────────┐
                 │   User (Patient)   │
                 └─────────┬──────────┘
@@ -126,20 +127,18 @@ Data Handling / Logic: From recent updates, the app utilizes localStorage for im
 
     Sensors → ESP32 → Internet → Backend → Frontend Dashboard → User
     
-             ┌──────────────┐
+         ┌──────────────┐
          │ Sensor Data  │
          └──────┬───────┘
                 ▼
         ┌──────────────┐
         │   ESP32      │
         └──────┬───────┘
-                ▼
+               ▼
         ┌──────────────┐
         │   Backend    │
         └──────┬───────┘
-                │
-     ┌──────────┴──────────┐
-     ▼                     ▼
+               │
 ┌──────────────┐   ┌──────────────┐
 │ Database     │   │ Alert System │
 └──────┬───────┘   └──────┬───────┘
@@ -156,3 +155,6 @@ UI Module → Dashboard
 Analytics Module (later) → Calories, trends
     Settings -.->|Logout| Index
     Profile -.->|Logout| Index
+
+     ┌──────────┴──────────┐
+     ▼                     ▼
