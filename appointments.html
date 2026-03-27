@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Appointment - LumiHealth</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0ea5e9;
+            --primary-dark: #0284c7;
+            --text-dark: #0f172a;
+            --text-gray: #64748b;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Outfit', sans-serif; }
+        body {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 50%, #bae6fd 100%);
+            min-height: 100vh; display: flex; align-items: center; justify-content: center;
+            color: var(--text-dark); position: relative; padding: 2rem 1rem;
+        }
+        .bg-element { position: fixed; top: -150px; right: -50px; width: 600px; height: 600px; background: rgba(56, 189, 248, 0.2); border-radius: 50%; filter: blur(80px); z-index: -1; }
+
+        .container {
+            background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.5); border-radius: 28px;
+            padding: 3rem; width: 100%; max-width: 550px;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.1);
+        }
+        .header-wrap { display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem; }
+        .icon-box {
+            width: 50px; height: 50px; background: #e0f2fe; color: #0ea5e9;
+            border-radius: 14px; display: flex; align-items: center; justify-content: center;
+            font-size: 1.5rem; box-shadow: 0 4px 10px rgba(14, 165, 233, 0.15);
+        }
+        h2 { font-size: 1.8rem; font-weight: 700; color: #1e293b; }
+
+        form { display: flex; flex-direction: column; gap: 1.5rem; }
+        .form-group { display: flex; flex-direction: column; gap: 0.6rem; }
+        label { font-weight: 600; font-size: 0.95rem; color: #334155; }
+        
+        select, input {
+            width: 100%; padding: 0.9rem 1.2rem;
+            border: 2px solid #e2e8f0; border-radius: 14px;
+            font-size: 1rem; color: #1e293b; background: rgba(255,255,255,0.7);
+            outline: none; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        select:focus, input:focus { border-color: var(--primary); background: #fff; box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.1); }
+        
+        .row { display: flex; gap: 1rem; }
+        .row > .form-group { flex: 1; }
+
+        button {
+            background: var(--primary); color: white; border: none;
+            padding: 1.1rem; border-radius: 14px; font-size: 1.1rem; font-weight: 600;
+            cursor: pointer; transition: all 0.3s; margin-top: 0.5rem;
+            box-shadow: 0 8px 20px rgba(14, 165, 233, 0.25);
+        }
+        button:hover { background: var(--primary-dark); transform: translateY(-2px); box-shadow: 0 10px 25px rgba(14, 165, 233, 0.3); }
+
+        .back-link {
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            margin-top: 2.5rem; color: var(--text-gray); text-decoration: none;
+            font-weight: 500; transition: color 0.3s;
+        }
+        .back-link:hover { color: var(--primary); }
+    </style>
+</head>
+<body>
+    <div class="bg-element"></div>
+
+    <div class="container">
+        <div class="header-wrap">
+            <div class="icon-box">🩺</div>
+            <h2>Book Appointment</h2>
+        </div>
+
+        <form onsubmit="bookAppointment(event)">
+            <div class="form-group">
+                <label>Select Specialist</label>
+                <select required>
+                    <option value="" disabled selected>Choose a doctor...</option>
+                    <option value="dr-smith">Dr. Smith - Cardiologist</option>
+                    <option value="dr-jane">Dr. Jane - Dentist</option>
+                    <option value="dr-allen">Dr. Allen - General Physician</option>
+                    <option value="dr-perez">Dr. Perez - Neurologist</option>
+                </select>
+            </div>
+
+            <div class="row">
+                <div class="form-group">
+                    <label>Date</label>
+                    <input type="date" required>
+                </div>
+                <div class="form-group">
+                    <label>Time</label>
+                    <input type="time" required>
+                </div>
+            </div>
+
+            <button type="submit">Confirm Booking</button>
+        </form>
+
+        <a href="dashboard.html" class="back-link">
+            &larr; Back to Dashboard
+        </a>
+    </div>
+
+    <script>
+        function bookAppointment(e) {
+            e.preventDefault();
+            alert('Your appointment has been requested successfully!');
+            // Redirects to dashboard after booking
+            window.location.href = 'dashboard.html';
+        }
+    </script>
+</body>
+</html>

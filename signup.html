@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - LumiHealth</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #10b981;
+            --primary-dark: #059669;
+            --text-dark: #0f172a;
+            --text-gray: #64748b;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Outfit', sans-serif; }
+        body {
+            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 50%, #bbf7d0 100%);
+            min-height: 100vh;
+            display: flex; align-items: center; justify-content: center;
+            color: var(--text-dark); position: relative; overflow: hidden;
+            padding: 2rem 1rem;
+        }
+        .circle-1 { position: absolute; width: 400px; height: 400px; background: rgba(52, 211, 153, 0.2); border-radius: 50%; top: -100px; right: -100px; filter: blur(40px); z-index: 0;}
+        .circle-2 { position: absolute; width: 300px; height: 300px; background: rgba(16, 185, 129, 0.2); border-radius: 50%; bottom: -50px; left: -50px; filter: blur(40px); z-index: 0;}
+        
+        .signup-box {
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            border-radius: 24px;
+            padding: 2.5rem 3rem;
+            width: 100%; max-width: 460px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.05);
+            text-align: center; position: relative; z-index: 10;
+        }
+        .icon-wrapper {
+            width: 60px; height: 60px;
+            background: linear-gradient(135deg, #34d399, var(--primary));
+            border-radius: 18px;
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 1.5rem auto;
+            color: white; font-size: 1.8rem;
+            box-shadow: 0 10px 20px rgba(16, 185, 129, 0.3);
+        }
+        h2 { font-size: 1.8rem; font-weight: 700; margin-bottom: 0.5rem; }
+        p.subtitle { color: var(--text-gray); margin-bottom: 2rem; font-size: 0.95rem; }
+        
+        form { display: flex; flex-direction: column; gap: 1.1rem; text-align: left; }
+        .input-group { display: flex; flex-direction: column; gap: 0.4rem; }
+        label { font-size: 0.9rem; font-weight: 600; color: #334155; }
+        input, select {
+            width: 100%; padding: 0.8rem 1rem;
+            border: 1.5px solid #e2e8f0; border-radius: 12px;
+            outline: none; transition: all 0.3s;
+            font-size: 0.95rem; background: rgba(255,255,255,0.9);
+        }
+        input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1); }
+        
+        .row { display: flex; gap: 1rem; }
+        .row > .input-group { flex: 1; }
+
+        button {
+            background: var(--primary); color: white; border: none;
+            padding: 0.95rem; border-radius: 12px; font-size: 1.05rem; font-weight: 600;
+            cursor: pointer; transition: all 0.3s; margin-top: 0.5rem;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+        }
+        button:hover { background: var(--primary-dark); transform: translateY(-2px); box-shadow: 0 6px 16px rgba(16, 185, 129, 0.3); }
+        
+        .login-link { margin-top: 1.5rem; color: var(--text-gray); font-size: 0.95rem; }
+        .login-link a { color: var(--primary); text-decoration: none; font-weight: 600; transition: color 0.3s; }
+        .login-link a:hover { color: var(--primary-dark); }
+        
+        .back-home { position: absolute; top: 1.5rem; left: 1.5rem; text-decoration: none; color: var(--text-gray); font-weight: 500; display: flex; align-items: center; gap: 0.3rem; z-index: 20;}
+        .back-home:hover { color: var(--primary); }
+    </style>
+</head>
+<body>
+    <a href="index.html" class="back-home">&larr; Back to Home</a>
+    <div class="circle-1"></div>
+    <div class="circle-2"></div>
+
+    <div class="signup-box">
+        <div class="icon-wrapper">✨</div>
+        <h2>Create Account</h2>
+        <p class="subtitle">Join our premium health community</p>
+
+        <form onsubmit="handleSignup(event)">
+            <div class="input-group">
+                <label>Full Name</label>
+                <input type="text" placeholder="John Doe" required>
+            </div>
+            
+            <div class="row">
+                <div class="input-group">
+                    <label>Age</label>
+                    <input type="number" placeholder="Eg: 25" required min="1" max="120">
+                </div>
+                <div class="input-group">
+                    <label>Gender</label>
+                    <select required>
+                        <option value="" disabled selected>Select</option>
+                        <option>Male</option>
+                        <option>Female</option>
+                        <option>Other</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label>Email Address</label>
+                <input type="email" placeholder="john@example.com" required>
+            </div>
+            <div class="input-group">
+                <label>Password</label>
+                <input type="password" placeholder="••••••••" required>
+            </div>
+            <button type="submit">Complete Sign Up</button>
+        </form>
+
+        <p class="login-link">Already have an account? <a href="login.html">Log In</a></p>
+    </div>
+
+    <script>
+        function handleSignup(e) {
+            e.preventDefault();
+            // In a real application, you would save user data to a server here.
+            // For now, redirect gracefully to the login page.
+            window.location.href = "login.html";
+        }
+    </script>
+</body>
+</html>

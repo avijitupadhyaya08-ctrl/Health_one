@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medical Records - LumiHealth</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #8b5cf6;
+            --primary-light: #ede9fe;
+            --primary-dark: #7c3aed;
+            --text-dark: #0f172a;
+            --text-gray: #64748b;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Outfit', sans-serif; }
+        body {
+            background: linear-gradient(135deg, #f3e8ff 0%, #fae8ff 50%, #fce7f3 100%);
+            min-height: 100vh; display: flex; align-items: center; justify-content: center;
+            color: var(--text-dark); position: relative; padding: 2rem 1rem;
+        }
+        .bg-element { position: fixed; bottom: -100px; left: -50px; width: 600px; height: 600px; background: rgba(168, 85, 247, 0.15); border-radius: 50%; filter: blur(80px); z-index: -1; }
+
+        .container {
+            background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.5); border-radius: 28px;
+            padding: 3rem; width: 100%; max-width: 650px;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.08);
+        }
+        .header-wrap { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; }
+        .title-box { display: flex; align-items: center; gap: 1rem; }
+        .icon-box {
+            width: 50px; height: 50px; background: var(--primary-light); color: var(--primary);
+            border-radius: 14px; display: flex; align-items: center; justify-content: center;
+            font-size: 1.5rem; box-shadow: 0 4px 10px rgba(139, 92, 246, 0.15);
+        }
+        h2 { font-size: 1.8rem; font-weight: 700; color: #1e293b; }
+
+        /* Upload Section */
+        .upload-area {
+            border: 2px dashed #cbd5e1;
+            border-radius: 16px;
+            padding: 1.5rem;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.5);
+            transition: all 0.3s ease;
+            margin-bottom: 2rem;
+            cursor: pointer;
+        }
+        .upload-area:hover { border-color: var(--primary); background: rgba(139, 92, 246, 0.05); }
+        .upload-area input[type="file"] { display: none; }
+        .upload-area label { cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 0.5rem; }
+        .upload-icon { font-size: 2rem; color: var(--primary); }
+        .upload-text { font-weight: 500; color: #475569; }
+        .upload-text span { color: var(--primary); text-decoration: underline; }
+
+        /* Records List */
+        .list-container { display: flex; flex-direction: column; gap: 1.25rem; }
+        
+        .record-card {
+            background: white; border-radius: 18px; padding: 1.25rem 1.5rem;
+            display: flex; justify-content: space-between; align-items: center;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+            border: 1px solid #f1f5f9; transition: all 0.3s;
+        }
+        .record-card:hover {
+            transform: translateY(-3px); box-shadow: 0 10px 20px rgba(139, 92, 246, 0.1); border-color: rgba(139, 92, 246, 0.3);
+        }
+
+        .record-info { display: flex; align-items: center; gap: 1.25rem; flex: 1;}
+        .r-icon { font-size: 1.6rem; }
+        .r-details h4 { font-size: 1.1rem; font-weight: 600; color: #1e293b; margin-bottom: 0.2rem; }
+        .r-details p { font-size: 0.9rem; color: var(--text-gray); }
+
+        .btn-group { display: flex; gap: 0.5rem; }
+        .btn {
+            background: transparent; border: 2px solid var(--primary); color: var(--primary);
+            padding: 0.5rem 1rem; border-radius: 10px; font-weight: 600; font-size: 0.85rem;
+            cursor: pointer; transition: all 0.3s;
+        }
+        .btn:hover { background: var(--primary); color: white; }
+        .btn-filled { background: var(--primary); color: white; }
+        .btn-filled:hover { background: var(--primary-dark); border-color: var(--primary-dark); }
+
+        .back-link {
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            margin-top: 2.5rem; color: var(--text-gray); text-decoration: none;
+            font-weight: 500; transition: color 0.3s;
+        }
+        .back-link:hover { color: var(--primary); }
+    </style>
+</head>
+<body>
+    <div class="bg-element"></div>
+
+    <div class="container">
+        <div class="header-wrap">
+            <div class="title-box">
+                <div class="icon-box">📄</div>
+                <h2>Medical Records</h2>
+            </div>
+        </div>
+
+        <!-- File Upload Area -->
+        <div class="upload-area">
+            <input type="file" id="fileUpload" accept=".pdf,.png,.jpg,.jpeg">
+            <label for="fileUpload">
+                <div class="upload-icon">☁️</div>
+                <div class="upload-text"><span>Click to upload</span> or drag and drop</div>
+                <div style="font-size: 0.8rem; color: var(--text-gray);">PDF, PNG, JPG (max. 10MB)</div>
+            </label>
+        </div>
+
+        <!-- View Past Reports -->
+        <h3 style="margin-bottom: 1rem; font-size: 1.2rem; color: #334155;">Past Reports</h3>
+        <div class="list-container">
+            <div class="record-card">
+                <div class="record-info">
+                    <div class="r-icon">🩸</div>
+                    <div class="r-details">
+                        <h4>Blood Test Report</h4>
+                        <p>Mar 15, 2026 &bull; 1.2 MB</p>
+                    </div>
+                </div>
+                <div class="btn-group">
+                    <button class="btn btn-filled" onclick="alert('Downloading File...')">Download</button>
+                    <button class="btn" onclick="alert('Opening Viewer...')">View</button>
+                </div>
+            </div>
+            
+            <div class="record-card">
+                <div class="record-info">
+                    <div class="r-icon">🩻</div>
+                    <div class="r-details">
+                        <h4>Chest X-Ray</h4>
+                        <p>Feb 28, 2026 &bull; 4.5 MB</p>
+                    </div>
+                </div>
+                <div class="btn-group">
+                    <button class="btn btn-filled" onclick="alert('Downloading File...')">Download</button>
+                    <button class="btn" onclick="alert('Opening Viewer...')">View</button>
+                </div>
+            </div>
+
+            <div class="record-card">
+                <div class="record-info">
+                    <div class="r-icon">💊</div>
+                    <div class="r-details">
+                        <h4>Prescription Hub</h4>
+                        <p>Updated Jan 10, 2026 &bull; 0.5 MB</p>
+                    </div>
+                </div>
+                <div class="btn-group">
+                    <button class="btn btn-filled" onclick="alert('Downloading File...')">Download</button>
+                    <button class="btn" onclick="alert('Opening Viewer...')">View</button>
+                </div>
+            </div>
+        </div>
+
+        <a href="dashboard.html" class="back-link">
+            &larr; Back to Dashboard
+        </a>
+    </div>
+
+    <script>
+        // Simulate file upload JS
+        document.getElementById('fileUpload').addEventListener('change', function(e) {
+            if(e.target.files.length > 0) {
+                alert('Success! File "' + e.target.files[0].name + '" has been securely uploaded.');
+            }
+        });
+    </script>
+</body>
+</html>

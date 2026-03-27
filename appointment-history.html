@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Appointment History - LumiHealth</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #f59e0b; 
+            --primary-dark: #d97706;
+            --primary-light: #fef3c7;
+            
+            --success: #10b981;
+            --success-light: #d1fae5;
+            
+            --warning: #f59e0b;
+            --warning-light: #fef3c7;
+            
+            --danger: #ef4444;
+            --danger-light: #fee2e2;
+            
+            --text-dark: #0f172a;
+            --text-gray: #64748b;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Outfit', sans-serif; }
+        body {
+            background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 50%, #fde68a 100%);
+            min-height: 100vh; display: flex; align-items: flex-start; justify-content: center;
+            color: var(--text-dark); position: relative; padding: 3rem 1rem;
+        }
+        .bg-element { position: fixed; top: 20%; left: -100px; width: 600px; height: 600px; background: rgba(245, 158, 11, 0.15); border-radius: 50%; filter: blur(80px); z-index: -1; }
+
+        .container {
+            background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.5); border-radius: 28px;
+            padding: 3rem; width: 100%; max-width: 800px;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.08);
+        }
+        
+        .header-wrap { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2.5rem; }
+        .title-box { display: flex; align-items: center; gap: 1rem; }
+        .icon-box {
+            width: 55px; height: 55px; background: var(--primary-light); color: var(--primary);
+            border-radius: 16px; display: flex; align-items: center; justify-content: center;
+            font-size: 1.8rem; box-shadow: 0 4px 10px rgba(245, 158, 11, 0.15);
+        }
+        h2 { font-size: 2rem; font-weight: 700; color: #1e293b; }
+        .title-box p { color: var(--text-gray); margin-top: 0.2rem;}
+
+        .list-container { display: flex; flex-direction: column; gap: 1.25rem; }
+        
+        .appt-card {
+            background: white; border-radius: 18px; padding: 1.5rem;
+            display: flex; justify-content: space-between; align-items: center;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+            border: 1px solid #f1f5f9; transition: all 0.3s;
+            position: relative;
+        }
+        .appt-card:hover {
+            transform: translateY(-3px); box-shadow: 0 10px 20px rgba(245, 158, 11, 0.1); border-color: rgba(245, 158, 11, 0.3);
+        }
+
+        .appt-info { display: flex; align-items: center; gap: 1.25rem; flex: 1;}
+        .doc-avatar {
+            width: 60px; height: 60px; background: #f8fafc; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 2rem; border: 2px solid #f1f5f9;
+        }
+        .a-details h4 { font-size: 1.2rem; font-weight: 700; color: #1e293b; margin-bottom: 0.2rem; }
+        .a-details p { font-size: 0.95rem; color: var(--text-gray); display: flex; gap: 0.5rem;}
+        
+        .status-badge {
+            padding: 0.3rem 0.8rem; border-radius: 20px; font-size: 0.8rem; font-weight: 700;
+            display: inline-block; white-space: nowrap; margin-bottom: 0.4rem;
+        }
+        .status-badge.pending { background: var(--warning-light); color: var(--warning); }
+        .status-badge.completed { background: var(--success-light); color: var(--success); }
+        .status-badge.cancelled { background: var(--danger-light); color: var(--danger); text-decoration: line-through;}
+
+        .actions { text-align: right; display: flex; flex-direction: column; gap: 0.5rem; align-items: flex-end;}
+        
+        .btn-cancel {
+            background: rgba(239, 68, 68, 0.1); border: 2px solid transparent; color: var(--danger);
+            padding: 0.5rem 1rem; border-radius: 10px; font-weight: 600; font-size: 0.85rem;
+            cursor: pointer; transition: all 0.3s;
+        }
+        .btn-cancel:hover { background: var(--danger); color: white; border-color: var(--danger); box-shadow: 0 4px 10px rgba(239, 68, 68, 0.2);}
+
+        .btn-disabled {
+            background: #f1f5f9; color: #94a3b8; border: 2px solid transparent;
+            padding: 0.5rem 1rem; border-radius: 10px; font-weight: 600; font-size: 0.85rem;
+            cursor: not-allowed;
+        }
+
+        .back-link {
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            margin-top: 2.5rem; color: var(--text-gray); text-decoration: none;
+            font-weight: 500; transition: color 0.3s;
+        }
+        .back-link:hover { color: var(--primary); }
+        
+        @media (max-width: 768px) {
+            .appt-card { flex-direction: column; align-items: flex-start; gap: 1rem; }
+            .actions { width: 100%; align-items: flex-start; }
+            .btn-cancel { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-element"></div>
+
+    <div class="container">
+        <div class="header-wrap">
+            <div class="title-box">
+                <div class="icon-box">📅</div>
+                <div>
+                    <h2>Appointment History</h2>
+                    <p>Track your upcoming, past, and cancelled visits.</p>
+                </div>
+            </div>
+            <a href="appointments.html" style="background:var(--primary); color:white; padding:0.8rem 1.2rem; border-radius:12px; font-weight:600; text-decoration:none; box-shadow: 0 4px 12px rgba(245, 158, 11, 0.2);">+ New Booking</a>
+        </div>
+
+        <div class="list-container">
+            
+            <!-- Pending Appointment -->
+            <div class="appt-card" id="appt-1">
+                <div class="appt-info">
+                    <div class="doc-avatar">👨‍⚕️</div>
+                    <div class="a-details">
+                        <span class="status-badge pending">Pending</span>
+                        <h4>Dr. Smith - Cardiologist</h4>
+                        <p><span>📅 April 10, 2026</span> <span>🕒 10:30 AM</span></p>
+                    </div>
+                </div>
+                <div class="actions">
+                    <button class="btn-cancel" onclick="cancelAppointment('appt-1')">Cancel Booking</button>
+                </div>
+            </div>
+
+            <!-- Completed Appointment -->
+            <div class="appt-card">
+                <div class="appt-info">
+                    <div class="doc-avatar">👩‍⚕️</div>
+                    <div class="a-details">
+                        <span class="status-badge completed">Completed</span>
+                        <h4>Dr. Jane - Dentist</h4>
+                        <p><span>📅 Feb 15, 2026</span> <span>🕒 02:00 PM</span></p>
+                    </div>
+                </div>
+                <div class="actions">
+                    <button class="btn-disabled" disabled>Completed</button>
+                </div>
+            </div>
+
+            <!-- Cancelled Appointment -->
+            <div class="appt-card">
+                <div class="appt-info">
+                    <div class="doc-avatar">👨‍⚕️</div>
+                    <div class="a-details" style="opacity: 0.6;">
+                        <span class="status-badge cancelled">Cancelled</span>
+                        <h4 style="text-decoration: line-through;">Dr. Allen - Gen. Physician</h4>
+                        <p><span>📅 Jan 28, 2026</span> <span>🕒 09:00 AM</span></p>
+                    </div>
+                </div>
+                <div class="actions">
+                    <button class="btn-disabled" disabled>Cancelled</button>
+                </div>
+            </div>
+
+        </div>
+
+        <a href="main.html" class="back-link">
+            &larr; Back to Hub
+        </a>
+    </div>
+
+    <script>
+        function cancelAppointment(id) {
+            const confirmed = confirm("Are you sure you want to cancel this appointment? This action cannot be undone.");
+            if(confirmed) {
+                const card = document.getElementById(id);
+                const badge = card.querySelector('.status-badge');
+                
+                // Update badge
+                badge.className = 'status-badge cancelled';
+                badge.innerText = 'Cancelled';
+                
+                // Update styling
+                card.querySelector('.a-details').style.opacity = '0.6';
+                card.querySelector('h4').style.textDecoration = 'line-through';
+                
+                // Update button
+                const actionContainer = card.querySelector('.actions');
+                actionContainer.innerHTML = '<button class="btn-disabled" disabled>Cancelled</button>';
+                
+                alert("Your appointment has been successfully cancelled.");
+            }
+        }
+    </script>
+</body>
+</html>
