@@ -67,72 +67,92 @@ Technical & Design Details:
 Tech Stack: The frontend is primarily structured using HTML, stylized with vanilla CSS, and made interactive via JavaScript.
 Design Language: You've implemented a highly modern "glassmorphism" aesthetic. The design relies on curated color palettes (Blues and Emeralds), subtle micro-animations, blur effects over background "blobs," and high-quality typography using the 'Outfit' font family.
 Data Handling / Logic: From recent updates, the app utilizes localStorage for immediate, persistent frontend state management (like tracking logged-in user names). However, there's also an infrastructure setup moving toward a backend integration (MongoDB/Node.js based authentication and a Supabase client connection).
+                ┌────────────────────┐
+                │   User (Patient)   │
+                └─────────┬──────────┘
+                          │
+                          ▼
+                ┌────────────────────┐
+                │  Sensors Layer     │
+                │--------------------│
+                │ • BP Sensor        │
+                │ • Temp Sensor      │
+                │ • (Future: Weight) │
+                └─────────┬──────────┘
+                          │
+                          ▼
+                ┌────────────────────┐
+                │ Microcontroller    │
+                │     (ESP32)        │
+                │--------------------│
+                │ • Read sensor data │
+                │ • Process values   │
+                │ • Format JSON      │
+                └─────────┬──────────┘
+                          │
+              WiFi / Bluetooth (API)
+                          │
+                          ▼
+                ┌────────────────────┐
+                │   Backend Server   │
+                │ (Supabase/Firebase)│
+                │--------------------│
+                │ • Store data       │
+                │ • Authentication   │
+                │ • Real-time sync   │
+                └─────────┬──────────┘
+                          │
+          Real-Time Fetch (API / WebSocket)
+                          │
+                          ▼
+                ┌────────────────────┐
+                │   Frontend App     │
+                │ (HTML/CSS/JS)      │
+                │--------------------│
+                │ • Dashboard UI     │
+                │ • Live readings    │
+                │ • Charts/History   │
+                │ • Alerts 🚨        │
+                └─────────┬──────────┘
+                          │
+                          ▼
+                ┌────────────────────┐
+                │   User Interface   │
+                │--------------------│
+                │ • View health data │
+                │ • Input weight     │
+                │ • Track calories   │
+                └────────────────────┘
 
-graph TD
-    %% Define Styles
-    classDef landing fill:#0ea5e9,stroke:#0284c7,stroke-width:2px,color:white,font-weight:bold;
-    classDef auth fill:#10b981,stroke:#059669,stroke-width:2px,color:white,font-weight:bold;
-    classDef dashboard fill:#8b5cf6,stroke:#6d28d9,stroke-width:2px,color:white,font-weight:bold;
-    classDef service fill:#f8fafc,stroke:#94a3b8,stroke-width:2px,color:#0f172a,border-radius:10px;
-    classDef util fill:#e2e8f0,stroke:#64748b,stroke-width:2px,color:#1e293b,border-radius:10px;
+    Sensors → ESP32 → Internet → Backend → Frontend Dashboard → User
+    
+             ┌──────────────┐
+         │ Sensor Data  │
+         └──────┬───────┘
+                ▼
+        ┌──────────────┐
+        │   ESP32      │
+        └──────┬───────┘
+                ▼
+        ┌──────────────┐
+        │   Backend    │
+        └──────┬───────┘
+                │
+     ┌──────────┴──────────┐
+     ▼                     ▼
+┌──────────────┐   ┌──────────────┐
+│ Database     │   │ Alert System │
+└──────┬───────┘   └──────┬───────┘
+       ▼                  ▼
+┌──────────────┐   ┌──────────────┐
+│ Frontend UI  │   │ Notifications│
+└──────────────┘   └──────────────┘
 
-    %% Nodes
-    Index[Landing Page\nindex.html]:::landing
-    
-    %% Auth
-    Login[Login Page\nlogin.html]:::auth
-    Signup[Sign Up Page\nsignup.html]:::auth
-    ForgotPw[Forgot Password\nforgot-password.html]:::auth
-    
-    %% Dashboard
-    Dashboard[User Dashboard\ndashboard.html / main.html]:::dashboard
-    
-    %% Core Services Modules
-    Appointments[Appointments Hub\nappointments.html]:::service
-    ApptHistory[History\nappointment-history.html]:::util
-    Doctors[Find Doctors\ndoctors.html]:::util
-    Search[Search System\nsearch.html]:::util
-    
-    Records[Medical Records\nrecords.html]:::service
-    
-    %% Utilities & Communication
-    Chatbot[AI Assistant\nchatbot.html]:::service
-    Emergency[Emergency Services\nemergency.html]:::service
-    Notifications[Alerts\nnotifications.html]:::service
-    Contact[Support\ncontact.html]:::service
-    
-    %% User Profile & Settings
-    Profile[User Profile\nprofile.html]:::service
-    Settings[Settings\nsettings.html]:::service
-    
-    %% Flow / Links
-    Index -->|Existing User| Login
-    Index -->|New User| Signup
-    
-    Login -->|Forgot Password?| ForgotPw
-    ForgotPw -->|Reset Success| Login
-    
-    Login -->|Authentication Success| Dashboard
-    Signup -->|Registration Success| Dashboard
-    
-    %% Dashboard to Modules Integrations
-    Dashboard --> Appointments
-    Dashboard --> Records
-    Dashboard --> Chatbot
-    Dashboard --> Emergency
-    Dashboard --> Notifications
-    
-    %% Sub-flows
-    Appointments --> ApptHistory
-    Appointments --> Doctors
-    Appointments --> Search
-    Dashboard --> Search
-    
-    %% Navigating utilities from Dashboard (header/sidebar)
-    Dashboard -.-> Profile
-    Dashboard -.-> Settings
-    Dashboard -.-> Contact
-    
-    %% Logout Flow
+🧩 Modules You’ll Build
+Hardware Module → Sensors + ESP32
+API Module → Send/receive data
+Database Module → Store readings
+UI Module → Dashboard
+Analytics Module (later) → Calories, trends
     Settings -.->|Logout| Index
     Profile -.->|Logout| Index
