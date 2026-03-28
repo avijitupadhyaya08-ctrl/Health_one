@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Health Assistant - LumiHealth</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #06b6d4; 
+            --primary-dark: #0891b2;
+            --primary-light: #cffafe;
+            --text-dark: #0f172a;
+            --text-gray: #475569;
+            --bg-glass: rgba(255, 255, 255, 0.85);
+            --border-glass: rgba(255, 255, 255, 0.5);
+            --bot-msg: #f1f5f9;
+            --user-msg: #cffafe;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Outfit', sans-serif; }
+        body {
+            background: linear-gradient(135deg, #f0fdfa 0%, #cffafe 50%, #bae6fd 100%);
+            min-height: 100vh; display: flex; align-items: center; justify-content: center;
+            color: var(--text-dark); position: relative; padding: 2rem; overflow: hidden;
+        }
+
+        .bg-blob-1 { position: absolute; top: -10%; left: -5%; width: 500px; height: 500px; background: rgba(6, 182, 212, 0.2); border-radius: 50%; filter: blur(80px); z-index: -1; }
+        .bg-blob-2 { position: absolute; bottom: -10%; right: -5%; width: 600px; height: 600px; background: rgba(14, 165, 233, 0.2); border-radius: 50%; filter: blur(80px); z-index: -1; }
+
+        .app-container {
+            display: flex; width: 100%; max-width: 1200px; height: 85vh;
+            background: var(--bg-glass); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--border-glass); border-radius: 30px;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.1); overflow: hidden;
+        }
+
+        /* Sidebar for Data Collection */
+        .sidebar {
+            width: 350px; background: rgba(255, 255, 255, 0.5);
+            border-right: 1px solid var(--border-glass);
+            padding: 2rem; overflow-y: auto; display: flex; flex-direction: column; gap: 1.5rem;
+        }
+        
+        .sidebar::-webkit-scrollbar { width: 6px; }
+        .sidebar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+
+        .side-header h2 { font-size: 1.5rem; font-weight: 700; color: #1e293b; display: flex; align-items: center; gap: 0.5rem;}
+        .side-header p { font-size: 0.9rem; color: var(--text-gray); margin-top: 0.3rem;}
+
+        .input-group { display: flex; flex-direction: column; gap: 0.4rem; }
+        label { font-size: 0.85rem; font-weight: 600; color: #334155; }
+        input, select {
+            width: 100%; padding: 0.75rem 1rem; border-radius: 12px;
+            border: 1.5px solid #e2e8f0; background: white;
+            font-size: 0.95rem; outline: none; transition: all 0.3s;
+        }
+        input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.15); }
+        .row { display: flex; gap: 0.8rem; }
+        .row > .input-group { flex: 1; }
+
+        .section-title { font-size: 1.1rem; font-weight: 700; color: var(--primary-dark); margin-top: 1rem; border-bottom: 2px solid #e2e8f0; padding-bottom: 0.5rem;}
+
+        .btn-save {
+            background: var(--primary); color: white; border: none; padding: 0.8rem;
+            border-radius: 12px; font-weight: 600; cursor: pointer; transition: all 0.3s;
+            margin-top: 1rem; width: 100%;
+        }
+        .btn-save:hover { background: var(--primary-dark); transform: translateY(-2px); }
+
+        /* Main Chat Area */
+        .chat-area {
+            flex: 1; display: flex; flex-direction: column; background: transparent;
+        }
+        
+        .chat-header {
+            padding: 1.5rem 2rem; border-bottom: 1px solid var(--border-glass);
+            display: flex; align-items: center; gap: 1rem; background: rgba(255,255,255,0.4);
+        }
+        .ai-avatar {
+            width: 50px; height: 50px; background: var(--primary-light); color: var(--primary-dark);
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            font-size: 1.5rem; border: 2px solid white; box-shadow: 0 4px 10px rgba(6, 182, 212, 0.2);
+        }
+        .chat-header h3 { font-size: 1.3rem; font-weight: 700; }
+        .status { font-size: 0.85rem; color: #10b981; font-weight: 600; display: flex; align-items: center; gap: 0.3rem;}
+        .status::before { content: ''; width: 8px; height: 8px; background: #10b981; border-radius: 50%; display: inline-block;}
+
+        .back-btn { margin-left: auto; text-decoration: none; color: var(--text-gray); font-weight: 500; font-size: 0.9rem; padding: 0.5rem 1rem; background: white; border-radius: 8px; border: 1px solid #e2e8f0;}
+        .back-btn:hover { color: var(--primary); }
+
+        .messages {
+            flex: 1; padding: 2rem; overflow-y: auto; display: flex; flex-direction: column; gap: 1rem;
+        }
+        .msg { max-width: 75%; padding: 1rem 1.2rem; border-radius: 20px; font-size: 0.95rem; line-height: 1.5; position: relative;}
+        
+        .msg.bot { background: var(--bot-msg); color: #1e293b; align-self: flex-start; border-bottom-left-radius: 5px; border: 1px solid #e2e8f0;}
+        .msg.user { background: var(--user-msg); color: #083344; align-self: flex-end; border-bottom-right-radius: 5px; }
+
+        .chat-input {
+            padding: 1.5rem 2rem; border-top: 1px solid var(--border-glass);
+            background: rgba(255,255,255,0.6); display: flex; gap: 1rem; align-items: center;
+        }
+        .chat-input input {
+            flex: 1; padding: 1rem 1.5rem; border-radius: 30px; border: 1px solid #e2e8f0;
+            font-size: 1rem; background: white; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02);
+        }
+        .chat-input button {
+            width: 50px; height: 50px; border-radius: 50%; background: var(--primary); color: white;
+            border: none; cursor: pointer; display: flex; align-items: center; justify-content: center;
+            font-size: 1.2rem; transition: transform 0.2s; box-shadow: 0 4px 10px rgba(6, 182, 212, 0.3);
+        }
+        .chat-input button:hover { transform: scale(1.05); background: var(--primary-dark); }
+        
+        @media (max-width: 900px) {
+            .app-container { flex-direction: column; height: 100vh; border-radius: 0; }
+            .sidebar { width: 100%; border-right: none; border-bottom: 1px solid var(--border-glass); height: 300px; flex-shrink: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-blob-1"></div>
+    <div class="bg-blob-2"></div>
+
+    <div class="app-container">
+        
+        <!-- Sidebar for Structured Data Collection -->
+        <div class="sidebar">
+            <div class="side-header">
+                <h2>Health Profile 🧾</h2>
+                <p>Provide details for accurate AI analysis</p>
+            </div>
+
+            <form onsubmit="saveHealthData(event)">
+                <div class="section-title">Vitals</div>
+                <div class="row">
+                    <div class="input-group">
+                        <label>Age</label>
+                        <input type="number" id="v-age" placeholder="e.g. 28" required>
+                    </div>
+                    <div class="input-group">
+                        <label>Gender</label>
+                        <select id="v-gender" required>
+                            <option value="">Select</option>
+                            <option>Male</option>
+                            <option>Female</option>
+                            <option>Other</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="input-group">
+                        <label>Weight (kg)</label>
+                        <input type="number" id="v-weight" placeholder="70" required>
+                    </div>
+                    <div class="input-group">
+                        <label>Height (cm)</label>
+                        <input type="number" id="v-height" placeholder="175" required>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label>Body Temp (°F)</label>
+                    <input type="number" id="v-temp" step="0.1" placeholder="98.6" required>
+                </div>
+
+                <div class="input-group" style="margin-top: 0.8rem;">
+                    <label>Known Disease / Problem</label>
+                    <input type="text" id="v-disease" placeholder="e.g. Asthma, Diabetes">
+                </div>
+
+                <div class="section-title">Lifestyle</div>
+                
+                <div class="input-group">
+                    <label>Exercise Frequency</label>
+                    <select id="l-exercise">
+                        <option>Rarely</option>
+                        <option>1-2 times/week</option>
+                        <option>3-5 times/week</option>
+                        <option>Daily</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label>Smoking History</label>
+                    <select id="l-smoke">
+                        <option>Non-smoker</option>
+                        <option>Occasional</option>
+                        <option>Regular</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label>Avg. Sleep (hours)</label>
+                    <input type="number" id="l-sleep" placeholder="7">
+                </div>
+
+                <button type="submit" class="btn-save">Sync Data to AI</button>
+            </form>
+        </div>
+
+        <!-- Main Chat Interface for Symptoms -->
+        <div class="chat-area">
+            <div class="chat-header">
+                <div class="ai-avatar">🤖</div>
+                <div>
+                    <h3>Lumi AI Assistant</h3>
+                    <div class="status">Online & Ready</div>
+                </div>
+                <a href="main.html" class="back-btn">Exit Chat</a>
+            </div>
+
+            <div class="messages" id="chat-messages">
+                <div class="msg bot">
+                    Hello! I am Lumi, your personal AI Health Assistant. Please ensure your <strong>Health Profile</strong> on the left is updated.
+                </div>
+                <div class="msg bot">
+                    What <strong>symptoms</strong> are you currently experiencing? You can tell me about any fever, cough, headache, or specific pains.
+                </div>
+            </div>
+
+            <form class="chat-input" onsubmit="sendMessage(event)">
+                <input type="text" id="user-input" placeholder="E.g., I have had a severe headache and slight fever since morning..." required autocomplete="off">
+                <button type="submit">➤</button>
+            </form>
+        </div>
+
+    </div>
+
+    <script>
+        function saveHealthData(e) {
+            e.preventDefault();
+            
+            const age = document.getElementById('v-age').value;
+            const gender = document.getElementById('v-gender').value;
+            const weight = document.getElementById('v-weight').value;
+            const height = document.getElementById('v-height').value;
+            const temp = document.getElementById('v-temp').value;
+            const disease = document.getElementById('v-disease').value || "None reported";
+            const exercise = document.getElementById('l-exercise').value;
+            const smoke = document.getElementById('l-smoke').value;
+            const sleep = document.getElementById('l-sleep').value;
+
+            // Generate string summary seamlessly
+            const summaryString = `My Vitals: Age ${age}, Gender ${gender}, Weight ${weight}kg, Height ${height}cm, Temp ${temp}°F. Past conditions: ${disease}. Lifestyle: ${exercise} exercise, ${smoke}, ${sleep}hrs sleep.`;
+            
+            // Paste exactly into the chat input
+            document.getElementById('user-input').value = summaryString;
+            
+            alert("Health profile compiled! It has been successfully pasted directly into your chat input as requested.");
+        }
+
+        function sendMessage(e) {
+            e.preventDefault();
+            const inputField = document.getElementById('user-input');
+            const userText = inputField.value;
+            if(!userText.trim()) return;
+
+            const messagesContainer = document.getElementById('chat-messages');
+            
+            // Append user message
+            messagesContainer.innerHTML += `<div class="msg user">${userText}</div>`;
+            inputField.value = '';
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+            // Simple AI Logic using Symptom Combinations
+            setTimeout(() => {
+                const text = userText.toLowerCase();
+                let replyText = "";
+                
+                // Condition 1: Cardiology Emergency
+                if (text.includes("chest pain") || (text.includes("heart") && text.includes("fast"))) {
+                    replyText = "⚠️ <strong>High Alert:</strong> Chest pain can be serious. Based on your vitals, I highly advise seeking emergency medical attention or booking our Cardiologist, Dr. Smith, immediately.";
+                }
+                // Condition 2: Dental Issues
+                else if (text.includes("tooth") || text.includes("gums") || text.includes("jaw pain")) {
+                    replyText = "Tooth and gum pains usually require physical inspection. It is highly recommended to book an appointment with our Dentist, Dr. Jane.";
+                }
+                // Condition 3: Neurological
+                else if ((text.includes("headache") || text.includes("migraine")) && (text.includes("dizzy") || text.includes("blurred"))) {
+                    replyText = "The combination of severe headaches with dizziness could represent neurological strain. I advise booking a consultation with our Neurologist, Dr. Perez.";
+                }
+                // Condition 4: General Flu/Infection (combinations)
+                else if ((text.includes("fever") || text.includes("hot")) && (text.includes("cough") || text.includes("sore throat"))) {
+                    replyText = "These symptoms align with a viral infection or the flu. Please stay hydrated, monitor your temperature, and if symptoms persist, book General Physician Dr. Allen.";
+                }
+                // Condition 5: Default/General Evaluation
+                else {
+                    replyText = "I have noted your symptoms. Based on your health profile and the reported issue, I recommend resting and monitoring yourself. Would you like me to book a general consultation to be safe?";
+                }
+
+                const aiReply = `<div class="msg bot">${replyText}</div>`;
+                messagesContainer.innerHTML += aiReply;
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            }, 1000);
+        }
+    </script>
+</body>
+</html>

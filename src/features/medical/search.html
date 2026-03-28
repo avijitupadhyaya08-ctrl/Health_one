@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health Quick Search - LumiHealth</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #f97316; /* Orange Theme */
+            --primary-dark: #ea580c;
+            --primary-light: #ffedd5;
+            --text-dark: #0f172a;
+            --text-gray: #64748b;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Outfit', sans-serif; }
+        body {
+            background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 50%, #fed7aa 100%);
+            min-height: 100vh; display: flex; align-items: center; justify-content: center;
+            color: var(--text-dark); position: relative; padding: 2rem 1rem; overflow-x: hidden;
+        }
+
+        .bg-element { position: absolute; top: -100px; right: -100px; width: 600px; height: 600px; background: rgba(249, 115, 22, 0.15); border-radius: 50%; filter: blur(80px); z-index: -1; }
+        
+        .container {
+            background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.5); border-radius: 28px;
+            padding: 3rem; width: 100%; max-width: 600px;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.08);
+            position: relative;
+        }
+
+        .header-wrap { display: flex; align-items: center; gap: 1rem; margin-bottom: 2.5rem; }
+        .icon-box {
+            width: 55px; height: 55px; background: var(--primary-light); color: var(--primary);
+            border-radius: 16px; display: flex; align-items: center; justify-content: center;
+            font-size: 1.8rem; box-shadow: 0 4px 10px rgba(249, 115, 22, 0.15);
+        }
+        h2 { font-size: 2rem; font-weight: 700; color: #1e293b; }
+        .header-wrap p { color: var(--text-gray); margin-top: 0.2rem;}
+
+        form { display: flex; flex-direction: column; gap: 1.25rem; }
+        .input-group { display: flex; flex-direction: column; gap: 0.5rem; }
+        label { font-size: 0.95rem; font-weight: 600; color: #334155; }
+        input {
+            width: 100%; padding: 0.85rem 1rem;
+            border: 1.5px solid #e2e8f0; border-radius: 12px;
+            outline: none; transition: all 0.3s;
+            font-size: 1rem; background: white;
+        }
+        input:focus { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(249, 115, 22, 0.1); }
+        
+        .action-btn {
+            background: var(--primary); color: white; border: none;
+            padding: 1rem; border-radius: 12px; font-size: 1.05rem; font-weight: 600;
+            cursor: pointer; transition: all 0.3s; margin-top: 1rem;
+            display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+            box-shadow: 0 4px 12px rgba(249, 115, 22, 0.2);
+        }
+        .action-btn:hover { background: var(--primary-dark); transform: translateY(-2px); box-shadow: 0 6px 16px rgba(249, 115, 22, 0.3); }
+
+        /* Advice Panel */
+        #advice-panel {
+            margin-top: 2rem; padding: 1.5rem; background: #f8fafc;
+            border: 1px solid #e2e8f0; border-radius: 16px; border-left: 4px solid var(--primary);
+            display: none; animation: fadeIn 0.5s ease;
+        }
+        #advice-panel h4 { font-size: 1.1rem; color: #1e293b; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem; }
+        #advice-panel p { font-size: 0.95rem; color: var(--text-gray); line-height: 1.5; margin-bottom: 1rem;}
+
+        .map-btn {
+            background: #10b981; color: white; text-align: center; display: inline-flex; justify-content: center; align-items: center;
+            padding: 0.6rem 1.2rem; border-radius: 10px; font-weight: 600; text-decoration: none; font-size: 0.9rem;
+            transition: all 0.3s; gap: 0.4rem; cursor: pointer; border: none;
+        }
+        .map-btn:hover { background: #059669; box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3);}
+
+        .back-link {
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            margin-top: 2.5rem; color: var(--text-gray); text-decoration: none;
+            font-weight: 500; transition: color 0.3s;
+        }
+        .back-link:hover { color: var(--primary); }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+    <div class="bg-element"></div>
+
+    <div class="container">
+        <div class="header-wrap">
+            <div class="icon-box">🔍</div>
+            <div>
+                <h2>Quick Search</h2>
+                <p>Find immediate advice and locate nearby medical help.</p>
+            </div>
+        </div>
+
+        <form id="searchForm" onsubmit="handleSearch(event)">
+            <div class="input-group">
+                <label>Disease or Symptoms</label>
+                <input type="text" id="disease" placeholder="e.g. Flu, Migraine, Stomach ache" required>
+            </div>
+            <div class="input-group">
+                <label>Target Medicine (Optional)</label>
+                <input type="text" id="medicine" placeholder="e.g. Paracetamol, Ibuprofen">
+            </div>
+            
+            <button type="submit" class="action-btn">
+                <span>Analyze & Find Nearby 📍</span>
+            </button>
+        </form>
+
+        <div id="advice-panel">
+            <h4>💡 Processing Advice</h4>
+            <p id="advice-text">Analyzing your input...</p>
+            <button class="map-btn" onclick="openMaps()">
+                <span>Open Google Maps</span> 📍
+            </button>
+        </div>
+
+        <a href="dashboard.html" class="back-link">
+            &larr; Back to Dashboard
+        </a>
+    </div>
+
+    <script>
+        let searchCoords = null;
+        let queryType = "pharmacy";
+
+        function handleSearch(e) {
+            e.preventDefault();
+            const disease = document.getElementById('disease').value.toLowerCase();
+            const medicine = document.getElementById('medicine').value.toLowerCase();
+            
+            const advicePanel = document.getElementById('advice-panel');
+            const adviceText = document.getElementById('advice-text');
+            
+            // Show Panel
+            advicePanel.style.display = 'block';
+            
+            // Simple Advice AI
+            let advice = "";
+            if(medicine) {
+                advice = `For effectively treating <strong>${disease}</strong> utilizing <strong>${medicine}</strong>, ensure you take the prescribed daily dosage and avoid taking it on an empty stomach unless specified. We will locate a nearby pharmacy for you immediately.`;
+                queryType = `pharmacy carrying ${medicine}`;
+            } else {
+                if(disease.includes('severe') || disease.includes('pain') || disease.includes('heart')) {
+                    advice = `<strong>${disease}</strong> can be critically serious. Please go to a hospital or clinic immediately. We will securely locate the nearest medical center for you.`;
+                    queryType = "hospital or urgent care";
+                } else {
+                    advice = `Ensure you drink plenty of fluids and rest if you are experiencing <strong>${disease}</strong>. We will locate a nearby pharmacy for general over-the-counter medication.`;
+                    queryType = "pharmacy";
+                }
+            }
+            
+            adviceText.innerHTML = advice + `<br><br><em>Acquiring your location...</em>`;
+
+            // Geolocation secure acquisition
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        searchCoords = { lat: position.coords.latitude, lng: position.coords.longitude };
+                        adviceText.innerHTML = advice + `<br><br><span style="color:#10b981; font-weight:600;">Location acquired securely! ✓</span> You can now confidently open Google Maps.`;
+                    },
+                    (error) => {
+                        adviceText.innerHTML = advice + `<br><br><span style="color:#ef4444; font-weight:600;">Location access denied.</span> Defaulting to generic search via Google Maps.`;
+                        searchCoords = 'denied';
+                    }
+                );
+            } else {
+                adviceText.innerHTML = advice + `<br><br>Geolocation is not supported by your browser.`;
+            }
+        }
+
+        function openMaps() {
+            let url = "";
+            if (searchCoords && searchCoords !== 'denied') {
+                url = `https://www.google.com/maps/search/${encodeURIComponent(queryType)}/@${searchCoords.lat},${searchCoords.lng},14z`;
+            } else {
+                url = `https://www.google.com/maps/search/${encodeURIComponent(queryType + " near me")}`;
+            }
+            window.open(url, '_blank');
+        }
+    </script>
+</body>
+</html>

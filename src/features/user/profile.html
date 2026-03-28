@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - LumiHealth</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0ea5e9;
+            --text-dark: #0f172a;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Outfit', sans-serif; }
+        body { background: #f0f9ff; color: var(--text-dark); display: flex; align-items: center; justify-content: center; min-height: 100vh; flex-direction: column; }
+        .box { background: white; padding: 3rem; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); text-align: center; }
+        h1 { margin-bottom: 1rem; color: var(--primary); }
+        .back-link { display: inline-block; margin-top: 1.5rem; color: white; background: var(--primary); padding: 0.8rem 1.5rem; text-decoration: none; border-radius: 12px; font-weight: 600; }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <h1 id="profileName">User Profile</h1>
+        <p>Email: <span id="profileEmail"></span></p>
+        <p>Age: <span id="profileAge"></span></p>
+        <p>Gender: <span id="profileGender"></span></p>
+        <a href="main.html" class="back-link">Back to Hub</a>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+            if (userData.fullname) {
+                document.getElementById('profileName').innerText = userData.fullname;
+                document.getElementById('profileEmail').innerText = userData.email;
+                document.getElementById('profileAge').innerText = userData.age;
+                document.getElementById('profileGender').innerText = userData.gender;
+            } else {
+                window.location.href = "login.html";
+            }
+        });
+    </script>
+</body>
+</html>
