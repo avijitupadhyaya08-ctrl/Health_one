@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - LumiHealth</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0ea5e9;
+            --primary-dark: #0284c7;
+            --text-dark: #0f172a;
+            --text-gray: #64748b;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Outfit', sans-serif; }
+        body {
+            background: linear-gradient(135deg, #f0f9ff 0%, #cffafe 50%, #e0f2fe 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-dark);
+            position: relative;
+            overflow: hidden;
+            padding: 1rem;
+        }
+        /* Background decorative circles */
+        .circle-1 { position: absolute; width: 400px; height: 400px; background: rgba(56, 189, 248, 0.2); border-radius: 50%; top: -100px; left: -100px; filter: blur(40px); }
+        .circle-2 { position: absolute; width: 300px; height: 300px; background: rgba(45, 212, 191, 0.2); border-radius: 50%; bottom: -50px; right: -50px; filter: blur(40px); }
+        
+        .login-box {
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            border-radius: 24px;
+            padding: 3rem;
+            width: 100%;
+            max-width: 420px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.05);
+            text-align: center;
+            position: relative;
+            z-index: 10;
+        }
+        .icon-wrapper {
+            width: 70px; height: 70px;
+            background: linear-gradient(135deg, var(--primary), #38bdf8);
+            border-radius: 20px;
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 1.5rem auto;
+            color: white; font-size: 2rem;
+            box-shadow: 0 10px 20px rgba(14, 165, 233, 0.3);
+        }
+        h2 { font-size: 1.8rem; font-weight: 700; margin-bottom: 0.5rem; }
+        p.subtitle { color: var(--text-gray); margin-bottom: 2.5rem; font-size: 1rem; }
+        
+        form { display: flex; flex-direction: column; gap: 1.25rem; text-align: left; }
+        .input-group { display: flex; flex-direction: column; gap: 0.5rem; }
+        label { font-size: 0.9rem; font-weight: 600; color: #334155; }
+        input {
+            width: 100%; padding: 0.85rem 1rem;
+            border: 1.5px solid #e2e8f0; border-radius: 12px;
+            outline: none; transition: all 0.3s;
+            font-size: 1rem; background: rgba(255,255,255,0.9);
+        }
+        input:focus { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.1); }
+        
+        button {
+            background: var(--primary); color: white; border: none;
+            padding: 1rem; border-radius: 12px; font-size: 1.05rem; font-weight: 600;
+            cursor: pointer; transition: all 0.3s; margin-top: 0.5rem;
+            box-shadow: 0 4px 12px rgba(14, 165, 233, 0.2);
+        }
+        button:hover { background: var(--primary-dark); transform: translateY(-2px); box-shadow: 0 6px 16px rgba(14, 165, 233, 0.3); }
+        
+        .register-link { margin-top: 2rem; color: var(--text-gray); font-size: 0.95rem; }
+        .register-link a { color: var(--primary); text-decoration: none; font-weight: 600; transition: color 0.3s; }
+        .register-link a:hover { color: var(--primary-dark); }
+        
+        .back-home { position: absolute; top: 1.5rem; left: 1.5rem; text-decoration: none; color: var(--text-gray); font-weight: 500; display: flex; align-items: center; gap: 0.3rem; z-index: 20;}
+        .back-home:hover { color: var(--primary); }
+    </style>
+</head>
+<body>
+    <a href="index.html" class="back-home">&larr; Back to Home</a>
+    <div class="circle-1"></div>
+    <div class="circle-2"></div>
+
+    <div class="login-box">
+        <div class="icon-wrapper">⚕️</div>
+        <h2>Welcome Back</h2>
+        <p class="subtitle">Enter your credentials to access your portal</p>
+
+        <form onsubmit="handleLogin(event)">
+            <div class="input-group">
+                <label>Email Address</label>
+                <input type="email" placeholder="john@example.com" required>
+            </div>
+            <div class="input-group">
+                <label>Password</label>
+                <input type="password" placeholder="••••••••" required>
+            </div>
+            <button type="submit">Log In</button>
+        </form>
+
+        <p class="register-link">Don't have an account? <a href="signup.html">Sign up</a></p>
+    </div>
+
+    <script>
+        function handleLogin(e) {
+            e.preventDefault();
+            // Redirects to central hub (main page) after form submission
+            window.location.href = "dashboard.html";
+        }
+    </script>
+</body>
+</html>
