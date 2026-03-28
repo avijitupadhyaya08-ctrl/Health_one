@@ -1,23 +1,22 @@
-# 🌟 LumiHealth
+#  LumiHealth
 
 LumiHealth is a premium, feature-rich healthcare web platform designed to provide a seamless patient experience. Patients can manage their health records, track vitals, book specialist appointments, and communicate directly with medical professionals through an intuitive, modern, glassmorphism-inspired UI.
 
-![LumiHealth Dashboard Concept](https://via.placeholder.com/1000x500.png?text=LumiHealth+Dashboard)
+
 
 ---
 
-## 🚀 Features
+##  Features
 
 *   **Secure Authentication:** End-to-end user registration and login flows with password hashing (`bcryptjs`) and local session capabilities.
 *   **Appointment Booking:** Dynamic scheduling system linked up to underlying SQLite database to book, list, and softly cancel medical visits.
 *   **User Dashboard:** A central hub providing an overview of health metrics, upcoming appointments, and recent notifications.
 *   **Feature-Based Architecture:** Beautifully isolated frontend and backend environments spanning isolated modules (auth, appointments, medical core).
 *   **Elegant UI/UX:** Built with a "glassmorphism" aesthetic, utilizing carefully curated color palettes (Blues and Emeralds), subtle micro-animations, and the 'Outfit' font family.
-*   **Future IoT Integration:** Extensible architecture ready to sync real-time BP and Temp sensor data from microcontrollers (e.g., ESP32).
 
 ---
 
-## 📂 Project Structure
+##  Project Structure
 
 LumiHealth has been built with an ultra-clean **Feature-Based Architecture**. 
 
@@ -53,7 +52,7 @@ LumiHealth/
 
 ---
 
-## 🛠️ Technology Stack
+## Technology Stack
 
 *   **Frontend:** Vanilla HTML5, CSS3, JavaScript
 *   **Backend framework:** Node.js, Express.js
@@ -63,7 +62,7 @@ LumiHealth/
 
 ---
 
-## 💻 Getting Started
+## Getting Started
 
 ### 1. Prerequisites
 Ensure you have the following installed on your local machine:
@@ -98,19 +97,41 @@ Visit [http://localhost:8080](http://localhost:8080) directly in your browser.
 
 ---
 
-## 📡 Future System Architecture (IoT Integration)
+## Data Flow Diagram (DFD)
 
-The end-goal of LumiHealth is to seamlessly integrate with real-time physical medical sensors:
+The current implementation of LumiHealth operates as a pure software ecosystem. The data flow architecture relies on a robust Node.js backend to securely bridge the frontend user interfaces directly with the SQLite database.
 
 ```mermaid
 graph TD;
-    Sensors[Health Sensors] -->|Temp, BP| ESP[ESP32 Microcontroller];
-    ESP -->|WiFi/API| Backend[Node.js / SQLite Server];
-    Backend -->|Live Sync| Frontend[LumiHealth Dashboard];
-    Frontend --> User[Patient];
+    %% External Entities
+    User((Patient / User))
+    
+    %% Processes (Node.js/Express)
+    Auth[Authentication Service]
+    Booking[Appointment Engine]
+    Dashboard[Dashboard API & Renderer]
+    
+    %% Data Stores (SQLite)
+    DB[(SQLite Database)]
+    
+    %% Data Flow
+    User -->|Registration / Login| Auth
+    User -->|Selects Specialist & Date| Booking
+    User -->|Requests Records| Dashboard
+    
+    Auth -->|Hash & Verify Credentials| DB
+    Booking -->|Insert New Reservation| DB
+    
+    DB -->|Provide Session Token / Profile| Auth
+    DB -->|Fetch Appointment Row| Booking
+    DB -->|Provide Historical Medical Data| Dashboard
+    
+    Auth -->|Grants Access| User
+    Dashboard -->|Renders UI Dashboards| User
+    Booking -->|Confirmation Alerts| User
 ```
 
-## 🤝 Contribution
+## Contribution
 Contributions, issues, and feature requests are welcome! 
 Feel free to check out the [issues page](https://github.com/your-repo/issues) to contribute.
 
