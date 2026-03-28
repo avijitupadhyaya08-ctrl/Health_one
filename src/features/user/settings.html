@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - LumiHealth</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1; 
+            --primary-dark: #4f46e5;
+            --primary-light: #e0e7ff;
+            --bg-color: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 50%, #cbd5e1 100%);
+            --text-dark: #0f172a;
+            --text-gray: #475569;
+            --card-bg: rgba(255, 255, 255, 0.85);
+            --card-border: rgba(255, 255, 255, 0.5);
+            --shadow: 0 25px 50px -12px rgba(0,0,0,0.08);
+            --border-line: #e2e8f0;
+        }
+
+        /* Variables for Dark Mode */
+        body.dark-mode {
+            --primary: #818cf8;
+            --primary-dark: #a5b4fc;
+            --primary-light: #312e81;
+            --bg-color: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+            --text-dark: #f8fafc;
+            --text-gray: #cbd5e1;
+            --card-bg: rgba(30, 41, 59, 0.85);
+            --card-border: rgba(255, 255, 255, 0.1);
+            --shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+            --border-line: #334155;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Outfit', sans-serif; transition: background 0.3s, color 0.3s, border-color 0.3s; }
+        
+        body {
+            background: var(--bg-color);
+            min-height: 100vh; display: flex; align-items: flex-start; justify-content: center;
+            color: var(--text-dark); position: relative; padding: 3rem 1rem;
+        }
+
+        .bg-element { position: fixed; top: 10%; right: -50px; width: 600px; height: 600px; background: rgba(99, 102, 241, 0.15); border-radius: 50%; filter: blur(80px); z-index: -1; }
+
+        .container {
+            background: var(--card-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--card-border); border-radius: 28px;
+            padding: 3rem; width: 100%; max-width: 800px;
+            box-shadow: var(--shadow);
+        }
+        
+        .header-wrap { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; border-bottom: 1px solid var(--border-line); padding-bottom: 1.5rem; }
+        .title-box { display: flex; align-items: center; gap: 1rem; }
+        .icon-box {
+            width: 55px; height: 55px; background: var(--primary-light); color: var(--primary);
+            border-radius: 16px; display: flex; align-items: center; justify-content: center;
+            font-size: 1.8rem; box-shadow: 0 4px 10px rgba(99, 102, 241, 0.15);
+        }
+        h2 { font-size: 2rem; font-weight: 700; color: var(--text-dark); }
+        .title-box p { color: var(--text-gray); margin-top: 0.2rem;}
+
+        .settings-group { margin-bottom: 2.5rem; }
+        .settings-group h3 {
+            font-size: 1.2rem; font-weight: 700; color: var(--primary); margin-bottom: 1.2rem;
+            display: flex; align-items: center; gap: 0.5rem;
+        }
+
+        .setting-item {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 1.2rem 1.5rem; border-radius: 16px;
+            background: rgba(255, 255, 255, 0.3); border: 1px solid var(--border-line);
+            margin-bottom: 0.8rem; transition: all 0.3s;
+        }
+        body.dark-mode .setting-item { background: rgba(0, 0, 0, 0.2); }
+        .setting-item:hover { transform: translateX(3px); border-color: var(--primary); }
+        
+        .s-info h4 { font-size: 1.1rem; font-weight: 600; color: var(--text-dark); margin-bottom: 0.2rem; }
+        .s-info p { font-size: 0.9rem; color: var(--text-gray); }
+
+        /* Toggle Switches */
+        .switch { position: relative; display: inline-block; width: 50px; height: 28px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider {
+            position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #cbd5e1; transition: .4s; border-radius: 34px;
+        }
+        body.dark-mode .slider { background-color: #475569; }
+        .slider:before {
+            position: absolute; content: ""; height: 20px; width: 20px;
+            left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%;
+        }
+        input:checked + .slider { background-color: var(--primary); }
+        input:checked + .slider:before { transform: translateX(22px); }
+
+        /* Select / Dropdown Inputs */
+        select {
+            padding: 0.6rem 1rem; border-radius: 12px; border: 1.5px solid var(--border-line);
+            background: var(--card-bg); color: var(--text-dark); font-weight: 500; font-size: 0.95rem;
+            outline: none; transition: border-color 0.3s;
+        }
+        select:focus { border-color: var(--primary); }
+
+        .back-link {
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            margin-top: 1rem; color: var(--text-gray); text-decoration: none;
+            font-weight: 500; transition: color 0.3s;
+        }
+        .back-link:hover { color: var(--primary); }
+
+    </style>
+</head>
+<body>
+    <div class="bg-element"></div>
+
+    <div class="container">
+        <div class="header-wrap">
+            <div class="title-box">
+                <div class="icon-box">⚙️</div>
+                <div>
+                    <h2>Settings</h2>
+                    <p>Customize your experience and manage your privacy preferences.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Appearance Profile -->
+        <div class="settings-group">
+            <h3>🎨 Appearance</h3>
+            <div class="setting-item">
+                <div class="s-info">
+                    <h4>Dark Mode</h4>
+                    <p>Toggle between light and dark visual themes</p>
+                </div>
+                <label class="switch">
+                    <input type="checkbox" id="theme-toggle" onchange="toggleTheme()">
+                    <span class="slider"></span>
+                </label>
+            </div>
+        </div>
+
+        <!-- Notification Preferences -->
+        <div class="settings-group">
+            <h3>🔔 Notifications</h3>
+            
+            <div class="setting-item">
+                <div class="s-info">
+                    <h4>Push Notifications</h4>
+                    <p>Receive appointment reminders directly on your device</p>
+                </div>
+                <label class="switch">
+                    <input type="checkbox" checked>
+                    <span class="slider"></span>
+                </label>
+            </div>
+
+            <div class="setting-item">
+                <div class="s-info">
+                    <h4>Email Alerts</h4>
+                    <p>Get daily updates, health tips, and system alerts via email</p>
+                </div>
+                <label class="switch">
+                    <input type="checkbox" checked>
+                    <span class="slider"></span>
+                </label>
+            </div>
+        </div>
+
+        <!-- Privacy & Security -->
+        <div class="settings-group">
+            <h3>🔒 Privacy Settings</h3>
+            
+            <div class="setting-item">
+                <div class="s-info">
+                    <h4>Profile Visibility</h4>
+                    <p>Control who can see your generic profile stats</p>
+                </div>
+                <select>
+                    <option>Private (Only me)</option>
+                    <option>Doctors Only</option>
+                    <option>Public</option>
+                </select>
+            </div>
+
+            <div class="setting-item">
+                <div class="s-info">
+                    <h4>Data Telemetry</h4>
+                    <p>Share anonymized usage data to help us improve LumiHealth</p>
+                </div>
+                <label class="switch">
+                    <input type="checkbox">
+                    <span class="slider"></span>
+                </label>
+            </div>
+        </div>
+
+        <a href="main.html" class="back-link">
+            &larr; Back to Hub
+        </a>
+    </div>
+
+    <script>
+        // Real functional Dark Mode toggle
+        const themeToggle = document.getElementById('theme-toggle');
+        const body = document.body;
+
+        // Load saved preference
+        if (localStorage.getItem('lumi-theme') === 'dark') {
+            body.classList.add('dark-mode');
+            themeToggle.checked = true;
+        }
+
+        function toggleTheme() {
+            if (themeToggle.checked) {
+                body.classList.add('dark-mode');
+                localStorage.setItem('lumi-theme', 'dark');
+            } else {
+                body.classList.remove('dark-mode');
+                localStorage.setItem('lumi-theme', 'light');
+            }
+        }
+    </script>
+</body>
+</html>

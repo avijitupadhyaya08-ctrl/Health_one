@@ -1,160 +1,118 @@
-Project Name: LumiHealth (Health Monitoring System)
-Overview: LumiHealth is a premium healthcare web platform designed to provide a seamless patient experience for managing health records, booking appointments, and communicating with medical professionals. The application focuses heavily on a modern, user-friendly UI utilizing a glassmorphism design aesthetic.
+# 🌟 LumiHealth
 
-Project Structure & Key Modules:
-1. Landing & Authentication Flow:
+LumiHealth is a premium, feature-rich healthcare web platform designed to provide a seamless patient experience. Patients can manage their health records, track vitals, book specialist appointments, and communicate directly with medical professionals through an intuitive, modern, glassmorphism-inspired UI.
 
+![LumiHealth Dashboard Concept](https://via.placeholder.com/1000x500.png?text=LumiHealth+Dashboard)
 
-index.html
-: The main landing page featuring hero sections, value propositions, and navigation to authentication.
+---
 
-login.html
- & 
+## 🚀 Features
 
-signup.html
-: Dedicated pages for user authentication, equipped with loading states and user-data handling.
+*   **Secure Authentication:** End-to-end user registration and login flows with password hashing (`bcryptjs`) and local session capabilities.
+*   **Appointment Booking:** Dynamic scheduling system linked up to underlying SQLite database to book, list, and softly cancel medical visits.
+*   **User Dashboard:** A central hub providing an overview of health metrics, upcoming appointments, and recent notifications.
+*   **Feature-Based Architecture:** Beautifully isolated frontend and backend environments spanning isolated modules (auth, appointments, medical core).
+*   **Elegant UI/UX:** Built with a "glassmorphism" aesthetic, utilizing carefully curated color palettes (Blues and Emeralds), subtle micro-animations, and the 'Outfit' font family.
+*   **Future IoT Integration:** Extensible architecture ready to sync real-time BP and Temp sensor data from microcontrollers (e.g., ESP32).
 
-forgot-password.html
-: Interface for account recovery.
-2. Core User Dashboard:
+---
 
+## 📂 Project Structure
 
-dashboard.html
-: The central hub for authenticated users providing an overview of their health metrics, upcoming appointments, and recent notifications.
+LumiHealth has been built with an ultra-clean **Feature-Based Architecture**. 
 
-main.html
-: Secondary dashboard or main application frame.
-3. Healthcare Services:
+Every feature encompasses its respective frontend view and backend route to keep the project highly modular and scalable:
 
+```text
+LumiHealth/
+├── src/
+│   ├── config/                # Database configurations (SQLite3)
+│   │   └── database.js
+│   ├── features/
+│   │   ├── appointments/      # Appointments logic & views
+│   │   │   ├── appointments.routes.js   
+│   │   │   ├── appointments.html        
+│   │   │   └── appointment-history.html
+│   │   ├── auth/              # Authentication logic & views
+│   │   │   ├── auth.routes.js           
+│   │   │   ├── login.html               
+│   │   │   └── signup.html
+│   │   ├── dashboard/         # End-user central dash
+│   │   │   └── dashboard.html
+│   │   ├── medical/           # Medical tracking & records
+│   │   │   └── records.html
+│   │   ├── user/              # Account preferences & profiles
+│   │   │   └── profile.html
+│   │   ├── core/              # Main Landing page
+│   │   │   └── index.html
+│   │   └── support/           # AI interactions
+│   │       └── chatbot.html
+├── server.js                  # Master Express entry point
+└── database.sqlite            # Live SQLite database file
+```
 
-appointments.html
- & 
+---
 
-appointment-history.html
-: Interfaces for users to schedule new visits (physical or virtual) and review previous consultations.
+## 🛠️ Technology Stack
 
-doctors.html
- & 
+*   **Frontend:** Vanilla HTML5, CSS3, JavaScript
+*   **Backend framework:** Node.js, Express.js
+*   **Database:** SQLite3
+*   **Security:** bcryptjs
+*   **Routing:** Express Routers mounted dynamically to feature static directories
 
-search.html
-: Directories to search for, filter, and discover participating top-rated healthcare specialists.
+---
 
-records.html
-: A secure area for patients to view medical histories, lab results, and active prescriptions.
+## 💻 Getting Started
 
-emergency.html
-: Quick-access page providing critical emergency contacts and protocols.
-4. Communication & Support:
+### 1. Prerequisites
+Ensure you have the following installed on your local machine:
+*   [Node.js](https://nodejs.org/en/) (v14 or higher)
+*   npm (Node Package Manager)
 
+### 2. Installation
 
-chatbot.html
-: An integrated AI chatbot or virtual assistant designed to handle quick queries, triage, or navigate the platform.
+Clone the repository and install the backend modules:
+```bash
+# Navigate to the project directory
+cd Health_one
 
-contact.html
-: Standard customer support and hospital contact interface.
+# Install necessary Node modules
+npm install
+```
 
-notifications.html
-: A dedicated panel for real-time alerts regarding prescription refills, test results, and appointment reminders.
-5. User Settings & Personalization:
+### 3. Run the Application
 
+Start the Express web server natively:
+```bash
+node server.js
+```
 
-profile.html
-: Interface for managing personal patient details.
+You should see:
+```bash
+Server is running on http://localhost:8080
+Connected to the SQLite database.
+```
 
-settings.html
-: User preferences, encompassing features like UI themes (e.g., light/dark mode toggles) and account configurations.
-Technical & Design Details:
-Tech Stack: The frontend is primarily structured using HTML, stylized with vanilla CSS, and made interactive via JavaScript.
-Design Language: You've implemented a highly modern "glassmorphism" aesthetic. The design relies on curated color palettes (Blues and Emeralds), subtle micro-animations, blur effects over background "blobs," and high-quality typography using the 'Outfit' font family.
-Data Handling / Logic: From recent updates, the app utilizes localStorage for immediate, persistent frontend state management (like tracking logged-in user names). However, there's also an infrastructure setup moving toward a backend integration (MongoDB/Node.js based authentication and a Supabase client connection).
+Visit [http://localhost:8080](http://localhost:8080) directly in your browser.
 
-                ┌────────────────────┐
-                │   User (Patient)   │
-                └─────────┬──────────┘
-                          │
-                          ▼
-                ┌────────────────────┐
-                │  Sensors Layer     │
-                │--------------------│
-                │ • BP Sensor        │
-                │ • Temp Sensor      │
-                │ • (Future: Weight) │
-                └─────────┬──────────┘
-                          │
-                          ▼
-                ┌────────────────────┐
-                │ Microcontroller    │
-                │     (ESP32)        │
-                │--------------------│
-                │ • Read sensor data │
-                │ • Process values   │
-                │ • Format JSON      │
-                └─────────┬──────────┘
-                          │
-              WiFi / Bluetooth (API)
-                          │
-                          ▼
-                ┌────────────────────┐
-                │   Backend Server   │
-                │ (Supabase/Firebase)│
-                │--------------------│
-                │ • Store data       │
-                │ • Authentication   │
-                │ • Real-time sync   │
-                └─────────┬──────────┘
-                          │
-          Real-Time Fetch (API / WebSocket)
-                          │
-                          ▼
-                ┌────────────────────┐
-                │   Frontend App     │
-                │ (HTML/CSS/JS)      │
-                │--------------------│
-                │ • Dashboard UI     │
-                │ • Live readings    │
-                │ • Charts/History   │
-                │ • Alerts 🚨        │
-                └─────────┬──────────┘
-                          │
-                          ▼
-                ┌────────────────────┐
-                │   User Interface   │
-                │--------------------│
-                │ • View health data │
-                │ • Input weight     │
-                │ • Track calories   │
-                └────────────────────┘
+---
 
-    Sensors → ESP32 → Internet → Backend → Frontend Dashboard → User
-    
-         ┌──────────────┐
-         │ Sensor Data  │
-         └──────┬───────┘
-                ▼
-        ┌──────────────┐
-        │   ESP32      │
-        └──────┬───────┘
-               ▼
-        ┌──────────────┐
-        │   Backend    │
-        └──────┬───────┘
-               │
-┌──────────────┐   ┌──────────────┐
-│ Database     │   │ Alert System │
-└──────┬───────┘   └──────┬───────┘
-       ▼                  ▼
-┌──────────────┐   ┌──────────────┐
-│ Frontend UI  │   │ Notifications│
-└──────────────┘   └──────────────┘
+## 📡 Future System Architecture (IoT Integration)
 
-🧩 Modules You’ll Build
-Hardware Module → Sensors + ESP32
-API Module → Send/receive data
-Database Module → Store readings
-UI Module → Dashboard
-Analytics Module (later) → Calories, trends
-    Settings -.->|Logout| Index
-    Profile -.->|Logout| Index
+The end-goal of LumiHealth is to seamlessly integrate with real-time physical medical sensors:
 
-     ┌──────────┴──────────┐
-     ▼                     ▼
+```mermaid
+graph TD;
+    Sensors[Health Sensors] -->|Temp, BP| ESP[ESP32 Microcontroller];
+    ESP -->|WiFi/API| Backend[Node.js / SQLite Server];
+    Backend -->|Live Sync| Frontend[LumiHealth Dashboard];
+    Frontend --> User[Patient];
+```
+
+## 🤝 Contribution
+Contributions, issues, and feature requests are welcome! 
+Feel free to check out the [issues page](https://github.com/your-repo/issues) to contribute.
+
+---
+*Crafted with precision for the future of healthcare technology.*
