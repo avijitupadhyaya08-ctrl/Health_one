@@ -16,7 +16,8 @@ const featureDirs = [
     'src/features/medical',
     'src/features/user',
     'src/features/core',
-    'src/features/support'
+    'src/features/support',
+    'src/features/skin-disease'
 ];
 
 featureDirs.forEach(dir => {
@@ -26,10 +27,12 @@ featureDirs.forEach(dir => {
 // Import Feature Routers
 const authRoutes = require('./src/features/auth/auth.routes');
 const appointmentRoutes = require('./src/features/appointments/appointments.routes');
+const skinDiseaseRoutes = require('./src/features/skin-disease/skin-disease.routes');
 
 // API Mounts
 app.use('/api', authRoutes);
 app.use('/api/appointments', appointmentRoutes);
+app.use('/api/skin-disease', skinDiseaseRoutes);
 
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);

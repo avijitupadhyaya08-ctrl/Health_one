@@ -2,7 +2,7 @@
 
 LumiHealth is a premium, feature-rich healthcare web platform designed to provide a seamless patient experience. Patients can manage their health records, track vitals, book specialist appointments, and communicate directly with medical professionals through an intuitive, modern, glassmorphism-inspired UI.
 
-
+![LumiHealth Dashboard Concept](https://via.placeholder.com/1000x500.png?text=LumiHealth+Dashboard)
 
 ---
 
@@ -44,8 +44,15 @@ LumiHealth/
 │   │   │   └── profile.html
 │   │   ├── core/              # Main Landing page
 │   │   │   └── index.html
+│   │   ├── skin-disease/      # AI Skin Disease Classification
+│   │   │   ├── skin-disease.routes.js   
+│   │   │   └── skin-disease.html
 │   │   └── support/           # AI interactions
 │   │       └── chatbot.html
+├── skin-disease-model/        # Python ML Inference Engine
+│   ├── detect.py
+│   ├── skin_disease_model_ISIC_densenet.h5
+│   └── requirements.txt
 ├── server.js                  # Master Express entry point
 └── database.sqlite            # Live SQLite database file
 ```
@@ -58,6 +65,7 @@ LumiHealth/
 *   **Backend framework:** Node.js, Express.js
 *   **Database:** SQLite3
 *   **Security:** bcryptjs
+*   **AI/ML Inference:** Python, TensorFlow, Keras
 *   **Routing:** Express Routers mounted dynamically to feature static directories
 
 ---
@@ -68,16 +76,21 @@ LumiHealth/
 Ensure you have the following installed on your local machine:
 *   [Node.js](https://nodejs.org/en/) (v14 or higher)
 *   npm (Node Package Manager)
+*   [Python](https://www.python.org/downloads/) (v3.8 or higher)
+*   pip (Python Package Installer)
 
 ### 2. Installation
 
-Clone the repository and install the backend modules:
+Clone the repository and install the backend and ML modules:
 ```bash
 # Navigate to the project directory
 cd Health_one
 
 # Install necessary Node modules
 npm install
+
+# Install necessary Python dependencies for AI Analysis
+pip install -r skin-disease-model/requirements.txt
 ```
 
 ### 3. Run the Application
